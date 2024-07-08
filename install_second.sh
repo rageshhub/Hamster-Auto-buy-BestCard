@@ -245,8 +245,15 @@ main() {
                 break
             fi
         else
-            echo -e "${red}Current balance ${cyan}(${current_balance}) ${red}minus price of item ${cyan}(${price}) ${red}is below the threshold ${cyan}(${min_balance_threshold})${red}. Stopping purchases.${rest}"
-            break
+            echo -e "${red}Current balance ${cyan}(${current_balance})${red} after deducting the price of item ${cyan}(${price})${red} is below the threshold ${cyan}(${min_balance_threshold})${red}. Waiting 10 minutes before rechecking the balance...${rest}"
+            sleep_duration=600  # Total wait time of 10 minutes
+            echo -e "${green}Waiting for ${yellow}$sleep_duration${green} seconds before checking balance again...${rest}"
+            while [ $sleep_duration -gt 0 ]; do
+                echo -ne "${cyan}$sleep_duration\033[0K\r${rest}"
+                sleep 1
+                ((sleep_duration--))
+            done
+            echo ""  # Move to the next line after countdown is complete
         fi
     done
 }
